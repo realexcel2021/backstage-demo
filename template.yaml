@@ -1,0 +1,38 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: slack-message-demo
+  title: My Slack message demo
+  description: Send a message via Slack
+
+parameters:
+  - title: API token
+    properties:
+      token_key:
+        title: Token Key
+        type: string
+      channel:
+        title: Channel
+        type: string
+      text:
+        title: Message Text
+        type: string
+
+
+spec:
+  owner: mdude2314
+  type: service
+
+  steps:
+    - id: 'send-message'
+      name: 'Send Notification'
+      action: 'http:backstage:request'
+      input:
+        method: 'POST'
+        path: 'https://slack.com/api/admin.users.remove'
+        headers:
+          content-type: 'application/json; charset=utf-8'
+          Authorization: "Bearer ${{ parameters.token_key }}"
+        body:
+          channel: ${{ parameters.channel }}
+          text: ${{ parameters.text }}
