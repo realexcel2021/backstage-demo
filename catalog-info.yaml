@@ -8,4 +8,5 @@ spec:
   type: other
   lifecycle: unknown
   owner: admin
-
+  targets:
+    - ./template.yaml
