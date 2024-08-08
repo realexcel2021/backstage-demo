@@ -32,15 +32,6 @@ scaffolder:
    locations:
 
 
-catalog:
-  locations:
-    - type: url
-      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/react-ssr-template/template.yaml
-      rules:
-        - allow: [Template]
-    - type: file
-      target: template.yaml 
-
 
 # apiVersion: backstage.io/v1alpha1
 # kind: Component
