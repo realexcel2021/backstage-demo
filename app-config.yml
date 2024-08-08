@@ -6,3 +6,12 @@ catalog:
         - allow: [Template]
     - type: file
       target: template.yaml 
+
+scaffolder:
+ catalog:
+   import:
+     entityFilename: catalog-info.yaml
+     pullRequestBranchName: backstage-integration
+   rules:
+     - allow: [Component, System, API, Resource, Domain, Template]
+   locations:
