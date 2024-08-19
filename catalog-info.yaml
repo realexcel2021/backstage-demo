@@ -6,8 +6,9 @@ metadata:
     Automate slack users removal
   annotations:
     github.com/project-slug: realexcel2021/backstage-demo
+    backstage.io/source-template: template:default/send-slack-message
 
 spec:
-  type: library
-  owner: CNCF
+  type: service
   lifecycle: experimental
+  owner: team-a
