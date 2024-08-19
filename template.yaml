@@ -2,66 +2,61 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 # some metadata about the template itself
 metadata:
-  name: v1beta3-demo
-  title: Test Action template
-  description: scaffolder v1beta3 template demo
+  name: send-slack-message
+  title: Send Message Using Slack API
+  description: This template sends slack message using the api
 spec:
-  owner: backstage/techdocs-core
+  owner: user:guest
   type: service
 
-  # these are the steps which are rendered in the frontend with the form input
+
   parameters:
-    - title: Fill in some steps
-      required:
-        - name
+    - title: API token
       properties:
-        name:
-          title: Name
+        team_id:
+          title: Team ID
           type: string
-          description: Unique name of the component
-          ui:autofocus: true
-          ui:options:
-            rows: 5
-    - title: Choose a location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
+        user_id:
+          title: User ID
           type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
 
-  # here's the steps that are executed in series in the scaffolder backend
   steps:
-    - id: fetch-base
-      name: Fetch Base
-      action: fetch:template
+    - id: 'remove-user'
+      name: 'Remove Slack User'
+      action: 'http:backstage:request'
       input:
-        url: ./template
-        values:
-          name: ${{ parameters.name }}
+        method: 'POST'
+        path: 'proxy/slack/admin.users.remove'
+        headers:
+          content-type: 'application/json'
+        body:
+          team_id: ${{ parameters.team_id }}
+          user_id: ${{ parameters.user_id }}
 
-    - id: fetch-docs
-      name: Fetch Docs
+    - id: fetch-repo
+      name: Fetch repo
       action: fetch:plain
       input:
-        targetPath: ./community
-        url: https://github.com/backstage/community/tree/main/backstage-community-sessions
+        url: https://github.com/realexcel2021/backstage-demo
 
-    - id: publish
-      name: Publish
-      action: publish:github
+    - id: append-file
+      name: Append To File Or Create New
+      action: roadiehq:utils:fs:append
       input:
-        allowedHosts: ['github.com']
-        description: This is ${{ parameters.name }}
-        repoUrl: ${{ parameters.repoUrl }}
+        path: users.txt
+        content: ${{ parameters.user_id }}
 
-    - id: register
-      name: Register
-      action: catalog:register
+    - id: publish-pr
+      name: Publish PR
+      action: publish:github:pull-request
       input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: '/catalog-info.yaml'
+        repoUrl: github.com?repo=backstage-demo&owner=realexcel2021
+        branchName:  main
+        title: Pull Request to remove user ${{ parameters.user_id }}
+        description: PR created from Backstage to remove slack user
+
+  outputs:
+    text:
+    - title: Operation Completed
+      content: |
+        User  `${{ parameters.user_id }}` successfully removed!!
