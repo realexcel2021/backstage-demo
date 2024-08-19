@@ -6,3 +6,8 @@ metadata:
     Automate slack users removal
   annotations:
     github.com/project-slug: realexcel2021/backstage-demo
+
+spec:
+  type: library
+  owner: CNCF
+  lifecycle: experimental
