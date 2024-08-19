@@ -1,10 +1,8 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: Automate Slack Users
-spec:
-  type: service
-  owner: user:guest
-  lifecycle: experimental
-
-
+  name: slack-users
+  description: |
+    Automate slack users removal
+  annotations:
+    github.com/project-slug: realexcel2021/backstage-demo
